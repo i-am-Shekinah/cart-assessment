@@ -2,10 +2,19 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "e-commerce",
+    "react",
+    "node.js",
+    "assessment"
+  ],
   "author": "Michael Olatunji",
   "license": "ISC",
   "description": "An assessment to build a mini e-commerce application with a React frontend and a Node.js backend.",
@@ -15,7 +24,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.7.0"
+    "mongoose": "^9.7.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -24,6 +34,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }
 }

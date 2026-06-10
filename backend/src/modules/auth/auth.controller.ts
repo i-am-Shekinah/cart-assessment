@@ -1,0 +1,42 @@
+import type {
+  Request,
+  Response,
+} from 'express';
+
+import { AuthService } from './auth.service.js';
+
+const authService = new AuthService();
+
+export class AuthController {
+
+    async register(req: Request, res: Response) {
+        try {
+            const result = await authService.register(req.body);
+
+            res.status(201).json({
+                success: true,
+                data: result,
+            });
+        } catch (error) {
+            res.status(400).json({
+                message: (error as Error).message
+            });
+        }
+    }
+
+    async login(req: Request, res: Response) {
+    try {
+
+        const result = await authService.login(req.body);
+
+        res.status(200).json({
+            success: true,
+            data: result,
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: (error as Error).message
+        });
+    }
+}
+}
