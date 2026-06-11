@@ -73,10 +73,7 @@ export class ProductsController {
         try {
             await productsService.deleteProduct(req.params.id);
 
-            res.status(204).json({
-                success: true,
-                message: 'Product deleted successfully'
-            })
+            res.status(204).send();
         } catch (error) {
             res.status(500).json({
                 message: (error as Error).message
