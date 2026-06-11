@@ -6,10 +6,13 @@ import routes from './routes/index.js';
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: [
+        'http://localhost:5173', 
+        'https://cart-assessment-sepia.vercel.app'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
-}))
+}));
 
 app.use(express.json());
 
