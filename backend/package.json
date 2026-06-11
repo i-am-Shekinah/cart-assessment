@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "tsx src/server.ts",
     "build": "tsc",
+    "start": "node dist/server.js",
     "seed:products": "tsx src/seed/products.seed.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,9 @@
   "author": "Michael Olatunji",
   "license": "ISC",
   "description": "An assessment to build a mini e-commerce application with a React frontend and a Node.js backend.",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",

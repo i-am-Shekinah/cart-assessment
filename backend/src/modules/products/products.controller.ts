@@ -39,7 +39,7 @@ export class ProductsController {
         }
     }
 
-    async getAllProducts(req: Request, res: Response) {
+    async getAllProducts(_req: Request, res: Response) {
         try {
             const products = await productsService.getAllProducts();
 
