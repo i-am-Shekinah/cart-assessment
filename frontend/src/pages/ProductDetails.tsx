@@ -6,6 +6,7 @@ import {
 import { useParams } from 'react-router-dom';
 
 import { getProductById } from '../api/products';
+import { formatNGN } from '../utils/formatCurrency';
 import { useCart } from '../context/CartContext';
 import type { Product } from '../types/product';
 
@@ -65,7 +66,7 @@ export default function ProductDetails() {
         </div>
 
         <div className="text-xl font-bold mb-4">
-          ${product.price}
+          {formatNGN(product.price)}
         </div>
 
         <button

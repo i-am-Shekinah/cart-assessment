@@ -5,8 +5,11 @@ import {
 
 import { Link } from 'react-router-dom';
 
-import { getProducts } from '../api/products';
+import { deleteProduct, getProducts } from '../api/products';
+import { formatNGN } from '../utils/formatCurrency';
+import ConfirmDialog from '../components/ConfirmDialog';
 import Navbar from '../components/Navbar';
+import ProductForm from '../components/ProductForm';
 import { useCart } from '../context/CartContext';
 import type { Product } from '../types/product';
 
@@ -14,16 +17,19 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<Product | null>(null);
 
   const { addToCart, cart } = useCart();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getProducts();
-      setProducts(data);
-    };
+  const fetchProducts = async () => {
+    const data = await getProducts();
+    setProducts(data);
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
   const categories = [...new Set(products.map((p) => p.category))];
@@ -44,8 +50,17 @@ export default function Products() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Products</h1>
 
-          <div className="text-sm bg-indigo-600 text-white px-3 py-1 rounded-full">
-            Cart: {cart.reduce((sum, item) => sum + item.quantity, 0)}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-green-600 text-white text-sm px-3 py-1 rounded hover:bg-green-700"
+            >
+              + Add Product
+            </button>
+
+            <div className="text-sm bg-indigo-600 text-white px-3 py-1 rounded-full">
+              Cart: {cart.reduce((sum, item) => sum + item.quantity, 0)}
+            </div>
           </div>
         </div>
 
@@ -83,7 +98,7 @@ export default function Products() {
 
               <p className="text-gray-600 text-sm mt-1">{product.description}</p>
 
-              <p className="mt-2 font-bold">${product.price}</p>
+              <p className="mt-2 font-bold">{formatNGN(product.price)}</p>
 
               <p className="text-xs text-gray-500 mt-1">{product.category}</p>
 
@@ -93,9 +108,57 @@ export default function Products() {
               >
                 Add to Cart
               </button>
+
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => {
+                    setEditingProduct(product);
+                    setShowForm(true);
+                  }}
+                  className="flex-1 bg-yellow-500 text-white py-1 rounded text-sm hover:bg-yellow-600"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => setConfirmDelete(product)}
+                  className="flex-1 bg-red-500 text-white py-1 rounded text-sm hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
+
+        {showForm && (
+          <ProductForm
+            product={editingProduct}
+            onClose={() => {
+              setShowForm(false);
+              setEditingProduct(null);
+            }}
+            onSaved={() => {
+              setShowForm(false);
+              setEditingProduct(null);
+              fetchProducts();
+            }}
+          />
+        )}
+
+        {confirmDelete && (
+          <ConfirmDialog
+            title="Delete Product"
+            message={`Are you sure you want to delete "${confirmDelete.name}"?`}
+            confirmLabel="Delete"
+            onConfirm={async () => {
+              await deleteProduct(confirmDelete._id);
+              setConfirmDelete(null);
+              fetchProducts();
+            }}
+            onCancel={() => setConfirmDelete(null)}
+          />
+        )}
       </div>
     </>
   );
