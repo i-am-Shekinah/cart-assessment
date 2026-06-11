@@ -1,6 +1,13 @@
-import { FormEvent, useEffect, useState } from 'react';
+import {
+  type FormEvent,
+  useEffect,
+  useState,
+} from 'react';
 
-import { createProduct, updateProduct } from '../api/products';
+import {
+  createProduct,
+  updateProduct,
+} from '../api/products';
 import type { Product } from '../types/product';
 
 interface ProductFormProps {
